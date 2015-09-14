@@ -1,0 +1,50 @@
+<link rel="import" href="../components/polymer/polymer.html">
+<link rel="import" href="../post-service/post-service.html">
+<link rel="import" href="post-card.html">
+<link rel="import" href="../components/core-media-query/core-media-query.html">
+
+<polymer-element name="post-list" attributes="show">
+  <template>
+    <style>
+    :host {
+      display: block;
+      width: 100%;
+    }
+    post-card {
+      margin-bottom: 30px;
+    }
+    </style>
+
+    <post-service id="service" posts="{{posts}}"></post-service>
+   <!--  <core-media-query query="max-width: 768px" queryMatches="{{phoneScreen}}"></core-media-query> -->
+    <div layout vertical center>
+      <template repeat="{{post in posts}}">
+        <post-card
+          
+          hidden?="{{(show == 'approved' && !post.approved) || (show == 'banned' && !post.banned) || (show == 'unapproved' && (post.banned || post.approved))}}"
+
+          on-approved-tap="{{handleApproved}}"
+          approved="{{post.approved}}"
+          on-ban-tap="{{handleBanned}}"
+          banned="{{post.banned}}">
+           <img src="{{post.avatar}}" width="327px" height="327px">   
+        </post-card>
+      </template>
+    </div>
+  </template>
+
+  <script>
+  Polymer({
+    handleApproved: function(event, detail, sender) {
+      var post = sender.templateInstance.model.post;
+      console.log(post);
+      this.$.service.setApproved(post.uid, post.approved);
+    },
+     handleBanned: function(event, detail, sender) {
+      var post = sender.templateInstance.model.post;
+
+      this.$.service.setBanned(post.uid, post.banned);
+    }
+  });
+  </script>
+</polymer-element>

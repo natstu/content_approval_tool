@@ -1,0 +1,121 @@
+<link rel="import" href="../components/polymer/polymer.html">
+<link rel="import" href="../components/core-icon-button/core-icon-button.html">
+<link rel="import" href="../components/paper-button/paper-button.html">
+
+<polymer-element name="post-card">
+  <template>
+    <style shim-shadowdom>
+    :host {
+      display: block;
+      position: relative;
+      background-color: white;
+      padding: 20px;
+      width: 100%;
+      font-size: 1.2rem;
+      font-weight: 300;
+    }
+
+    polyfill-next-selector { content: '.card-header h2'; }
+    .card-header ::content h2 {
+      margin: 0;
+      font-size: 1.8rem;
+      font-weight: 300;
+    }
+    polyfill-next-selector { content: '.card-header img'; }
+    .card-header ::content img {
+      width: 100%;
+      margin: 10px;
+    }
+  
+    paper-tabs::shadow 
+    #selectionBar { 
+        background-color: green;
+    }
+    #ink {
+        color: green;
+      }
+      #btn-panel {
+        margin-top: 20px;
+      }
+
+    :host([favorite]) core-icon-button {
+      color: #da4336;
+    }
+      core-icon[icon="thumb-up"],
+      core-icon[icon="cancel"] {
+        margin-right: 15px;
+        height: 23px;
+        width: 20px;
+      }
+
+      paper-button {
+        border-radius: 3px 3px 3px 3px;
+        padding-right: 10px;
+        padding-left: 10px;
+        border: none;
+        width: 100%;
+      }
+
+      paper-button#approve {
+        background-color: rgb(228, 48, 33);
+        margin-right: 30px;
+       }
+
+      paper-button#ban {
+       background-color: rgb(50, 51, 51);
+       }
+
+      paper-button::shadow .button-content {
+        padding: 3px;
+        font-size: 14px;
+        color: white;
+        text-align: center;
+        text-transform: none;
+      }
+    </style>
+
+    <div class="card-header" horizontal center-justified layout>
+      <content select="img"></content>
+    </div>
+
+    <div id="btn-panel" horizontal center-justified layout>
+      <paper-button
+        id="approve"
+        on-tap="{{approvedTapped}}"><core-icon icon="thumb-up"></core-icon>Approve
+      </paper-button>
+      <paper-button
+        id="ban"
+        on-tap="{{bannedTapped}}"><core-icon icon="cancel" ></core-icon>Ban
+      </paper-icon-button>
+    </div>
+
+
+  </template>
+  <script>
+  Polymer({
+   publish: {
+  
+      approved: {
+        value: false,
+        reflect: true
+      },
+
+       banned: {
+        value: false,
+        reflect: true
+      }
+    },
+
+
+    approvedTapped: function(event, detail, sender) {
+      this.approved = !this.approved;
+      this.fire('approved-tap');
+    },
+
+    bannedTapped: function(event, detail, sender) {
+      this.banned = !this.banned;
+      this.fire('ban-tap');
+    }
+  });
+  </script>
+</polymer-element>
